@@ -1,0 +1,4 @@
+name: miner
+version: '1.0.0'
+main: com.modencore.miner.MinerPlugin
+api-version: '1.21'
