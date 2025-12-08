@@ -9,7 +9,8 @@ public final class MinerPlugin extends JavaPlugin {
     Liba liba;
     @Override
     public void onEnable() {
-         liba = new Liba(this);   // my library  - For this to work, you must compile the liba project with the clean install command.
+        plugin = this;
+        this.liba = new Liba(this);   // my library  - For this to work, you must compile the liba project with the clean install command.
 
 
     }
