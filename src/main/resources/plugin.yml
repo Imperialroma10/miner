@@ -1,4 +1,8 @@
 name: miner
-version: '1.0.0'
+version: version
 main: com.modencore.miner.MinerPlugin
 api-version: '1.21'
+commands:
+  miner:
+    description: "miner"
+    usage: "miner"
