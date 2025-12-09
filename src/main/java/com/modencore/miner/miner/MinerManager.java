@@ -13,7 +13,7 @@ public class MinerManager {
     public static void addMiner( Miner miner)
     {
         miners.put(miner.getLocation(), miner);
-        Bukkit.getPlayer(miner.getUuid()).sendMessage("You place miner");
+        Bukkit.getPlayer(miner.getOwner()).sendMessage("You place miner");
     }
 
     public static Miner getMiner( Location location )
@@ -26,14 +26,14 @@ public class MinerManager {
         Miner miner = miners.get(location);
         if (miner == null) return;
 
-        Bukkit.getPlayer(miner.getUuid()).sendMessage("You remove miner");
+        Bukkit.getPlayer(miner.getOwner()).sendMessage("You remove miner");
         miners.remove(location);
 
 
     }
     public static void removeMiner( Miner miner )
     {
-        Bukkit.getPlayer(miner.getUuid()).sendMessage("You remove miner");
+        Bukkit.getPlayer(miner.getOwner()).sendMessage("You remove miner");
         miners.values().removeIf(miner1 -> miner1 == miner);
     }
 
