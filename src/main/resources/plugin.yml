@@ -1,8 +1,49 @@
-name: miner
-version: version
+name: ImperialRomaMiner
+version: ${version}
 main: com.modencore.miner.MinerPlugin
 api-version: '1.21'
+description: An automatic mining machine plugin that digs down to bedrock.
+author: ImperialRoma
+
 commands:
   miner:
-    description: "miner"
-    usage: "miner"
+    description: Main command for the miner plugin
+    usage: /miner <give|reload|help>
+    permission: miner.use
+
+permissions:
+  miner.*:
+    description: Gives access to all miner permissions
+    default: op
+    children:
+      miner.use: true
+      miner.place: true
+      miner.admin.*: true
+  
+  miner.use:
+    description: Allows players to interact with miners
+    default: true
+  
+  miner.place:
+    description: Allows players to place miner blocks
+    default: true
+  
+  miner.admin.*:
+    description: Gives access to all admin permissions
+    default: op
+    children:
+      miner.admin.give: true
+      miner.admin.reload: true
+      miner.admin.break: true
+  
+  miner.admin.give:
+    description: Allows giving miner items to players
+    default: op
+  
+  miner.admin.reload:
+    description: Allows reloading the plugin configuration
+    default: op
+  
+  miner.admin.break:
+    description: Allows breaking other players' miners
+    default: op

@@ -19,14 +19,15 @@ repositories {
 dependencies {
     compileOnly("org.spigotmc:spigot-api:1.21.8-R0.1-SNAPSHOT")
     implementation("com.imperial:liba:1.1.4")
+    implementation("com.google.code.gson:gson:2.10.1")
 }
 
 shadowJar {
     archiveClassifier.set('')
     minimize()
 
-
-   relocate 'com.imperial.liba', 'com.modencore.libs.liba'
+    relocate 'com.imperial.liba', 'com.modencore.libs.liba'
+    relocate 'com.google.gson', 'com.modencore.libs.gson'
 }
 
 tasks {
