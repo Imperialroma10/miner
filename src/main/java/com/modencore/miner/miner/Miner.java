@@ -4,6 +4,7 @@ import com.modencore.miner.MinerPlugin;
 import com.modencore.miner.gui.MinerMainMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
@@ -20,26 +21,30 @@ public class Miner {
     MinerMainMenu menu = new MinerMainMenu("Menu title", 27, this); // 27 items in menu
     BukkitTask scheduler;
     boolean enable;
+    int startY;
+    MinerHead minerHead;
 
     public Miner(Location location, Player owner){
         uuid = UUID.randomUUID();
         this.owner = owner.getUniqueId();
         this.location = location;
+        this.startY = location.clone().getBlockY()-1;
     }
 
     public void start(){
         if (isEnable()) return;
         enable = true;
-        scheduler = Bukkit.getScheduler().runTaskTimerAsynchronously(MinerPlugin.getPlugin(), this::Task, 0, 20);
+        scheduler = Bukkit.getScheduler().runTaskTimer(MinerPlugin.getPlugin(), this::Task, 0, 20);
     }
     public void stop(){
         if (!isEnable()) return;
         enable = false;
         scheduler.cancel();
-
     }
 
     public void Task(){
+        if (minerHead == null) minerHead = new MinerHead(this);
+        minerHead.nextBlock();
 
     }
 
