@@ -46,5 +46,14 @@ public class MinerMainMenu extends Menu {
             e.setCancelled(true);
         }));
 
+        addSlot(15, new MenuSlot(new TextButton(ItemUtil.create(new ItemStack(Material.LAVA_BUCKET), "Add fuel")), (p, e) -> {
+
+            miner.getFueltank().addFuel(200);
+
+            e.setCancelled(true);
+            // action
+        }));
+
     }
+
 }

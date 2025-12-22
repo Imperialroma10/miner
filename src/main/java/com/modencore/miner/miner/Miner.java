@@ -2,12 +2,12 @@ package com.modencore.miner.miner;
 
 import com.modencore.miner.MinerPlugin;
 import com.modencore.miner.gui.MinerMainMenu;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.util.Vector;
 
 import java.awt.font.TextHitInfo;
 import java.util.UUID;
@@ -23,6 +23,7 @@ public class Miner {
     boolean enable;
     int startY;
     MinerHead minerHead;
+    FuelTank fueltank = new FuelTank(this);
 
     public Miner(Location location, Player owner){
         uuid = UUID.randomUUID();
@@ -43,8 +44,9 @@ public class Miner {
     }
 
     public void Task(){
-        if (minerHead == null) minerHead = new MinerHead(this);
-        minerHead.nextBlock();
+        if (this.minerHead == null) this.minerHead = new MinerHead(this);
+
+        this.minerHead.nextBlock();
 
     }
 
@@ -66,5 +68,15 @@ public class Miner {
 
     public UUID getUuid() {
         return uuid;
+    }
+
+    public FuelTank getFueltank() {
+        return fueltank;
+    }
+
+
+
+    public MinerHead getMinerHead() {
+        return minerHead;
     }
 }

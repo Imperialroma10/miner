@@ -1,11 +1,12 @@
 package com.modencore.miner.miner;
 
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
+import java.util.List;
+
 
 public class MinerHead {
 
@@ -15,8 +16,12 @@ public class MinerHead {
     Material material = Material.DIAMOND_BLOCK;
     Material chainMaterial = Material.CHAIN;
     int radius = 1;
+
+    List<Material> black_list = new ArrayList<>();
+
     public  MinerHead(Miner miner)
     {
+        black_list.add(Material.BEDROCK);
         this.miner = miner;
         spawn();
     }
@@ -36,29 +41,73 @@ public class MinerHead {
     }
 
     public void mineBlock(Block block){
-        block.breakNaturally();
+        if (miner.getFueltank().takeFuel(5)){
+
+            playEnergyBeam();
+            block.breakNaturally();
+        }else{
+            miner.stop();
+            Bukkit.getPlayer(miner.getOwner()).sendMessage("No fuel, miner disabled");
+        }
+
     }
 
     public void spawn(){
         Location minerlocation = miner.getLocation().clone();
         minerlocation.setY(minerlocation.getBlockY()-1);
         this.currentLocation = minerlocation;
-        mineBlock(currentLocation.getBlock());
-        this.currentLocation.getBlock().setType(material);
+        if (!black_list.contains(minerlocation.getBlock().getType())) {
+            mineBlock(currentLocation.getBlock());
+            this.currentLocation.getBlock().setType(material);
+        }else{
+            Bukkit.getPlayer(miner.getOwner()).sendMessage("The miner's head hit the forbidden block");
+            miner.stop();
+        }
+
     }
 
+
     public void nextRow(){
-        currentLocation.getBlock().setType(chainMaterial);
-        currentLocation = currentLocation.clone().add(0, -1, 0);
-        mineBlock(currentLocation.getBlock());
-        currentLocation.getBlock().setType(material);
+
+        if (!black_list.contains(currentLocation.clone().add(0,-1,0).getBlock().getType())) {
+            currentLocation.getBlock().setType(chainMaterial);
+            currentLocation = currentLocation.clone().add(0, -1, 0);
+            mineBlock(currentLocation.getBlock());
+            currentLocation.getBlock().setType(material);
+        }else{
+            Bukkit.getPlayer(miner.getOwner()).sendMessage("The miner's head hit the forbidden block");
+            miner.stop();
+        }
+
+
     }
 
     public Location getHeadLocation(){
         return currentLocation;
     }
 
+    public void playEnergyBeam() {
+        Location from = miner.getLocation().clone().add(0.5, 0.5, 0.5);
+        Location to = getHeadLocation().clone().add(0.5, 0.5, 0.5);
 
+        World world = from.getWorld();
+        if (world == null) return;
+
+        Vector direction = to.toVector().subtract(from.toVector());
+        double length = direction.length();
+        direction.normalize();
+
+        for (double i = 0; i < length; i += 0.25) {
+            Location point = from.clone().add(direction.clone().multiply(i));
+
+            world.spawnParticle(
+                    Particle.DUST,
+                    point,
+                    1,
+                    new Particle.DustOptions(Color.AQUA, 1.2F)
+            );
+        }
+    }
 
 
 }
