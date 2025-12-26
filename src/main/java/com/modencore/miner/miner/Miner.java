@@ -1,10 +1,13 @@
 package com.modencore.miner.miner;
 
+import com.liba.utils.ItemUtil;
 import com.modencore.miner.MinerPlugin;
 import com.modencore.miner.gui.MinerMainMenu;
+import com.modencore.miner.utils.MinerUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
@@ -17,6 +20,8 @@ public class Miner {
     UUID uuid;
     UUID owner;
     Location location;
+
+    public static NamespacedKey NAMESPACED_KEY = new NamespacedKey(MinerPlugin.getPlugin(), "item");
 
     MinerMainMenu menu = new MinerMainMenu("Menu title", 27, this); // 27 items in menu
     BukkitTask scheduler;
@@ -74,6 +79,11 @@ public class Miner {
         return fueltank;
     }
 
+    public static ItemStack getMinerItemStack(){
+        ItemStack itemStack = ItemUtil.create(new ItemStack(Material.IRON_BLOCK), "Miner");
+        itemStack = MinerUtils.setMinerBlock(itemStack);
+        return itemStack;
+    }
 
 
     public MinerHead getMinerHead() {

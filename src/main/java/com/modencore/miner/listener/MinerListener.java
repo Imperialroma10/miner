@@ -2,6 +2,7 @@ package com.modencore.miner.listener;
 
 import com.modencore.miner.miner.Miner;
 import com.modencore.miner.miner.MinerManager;
+import com.modencore.miner.utils.MinerUtils;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
@@ -26,7 +27,7 @@ public class MinerListener implements Listener {
 
     @EventHandler
     public void placeMiner(BlockPlaceEvent e){
-        if (e.getBlock().getType() == Material.IRON_BLOCK){ // This is temporary for testing purposes, we will change it later.
+        if (MinerUtils.isMinerBlock(e.getItemInHand())){
             MinerManager.addMiner(new Miner(e.getBlock().getLocation(), e.getPlayer()));
         }
 

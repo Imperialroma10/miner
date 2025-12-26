@@ -4,6 +4,7 @@ import com.liba.Liba;
 import com.modencore.miner.commands.MinerCommands;
 import com.modencore.miner.lang.Lang;
 import com.modencore.miner.listener.MinerListener;
+import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -13,6 +14,7 @@ public final class MinerPlugin extends JavaPlugin {
     static MinerPlugin plugin;
     Liba liba;
     static Lang lang;
+
     @Override
     public void onEnable() {
         plugin = this;
