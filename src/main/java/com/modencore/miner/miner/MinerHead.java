@@ -2,10 +2,14 @@ package com.modencore.miner.miner;
 
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class MinerHead {
@@ -13,6 +17,7 @@ public class MinerHead {
     Miner miner;
 
     Location currentLocation;
+    Location dropLocation;
     Material material = Material.DIAMOND_BLOCK;
     Material chainMaterial = Material.CHAIN;
     int radius = 1;
@@ -22,7 +27,9 @@ public class MinerHead {
     public  MinerHead(Miner miner)
     {
         black_list.add(Material.BEDROCK);
+        black_list.add(Material.WATER);
         this.miner = miner;
+        dropLocation = miner.getLocation().clone().add(0.5,1, 0.5);
         spawn();
     }
 
@@ -40,11 +47,37 @@ public class MinerHead {
         nextRow();
     }
 
+    public void checkChest(Block block) {
+
+        // Если блок — сундук
+        if (dropLocation.getBlock().getType() == Material.CHEST) {
+
+            Chest chest = (Chest) dropLocation.getBlock().getState();
+
+            Map<Integer, ItemStack> leftover =
+                    chest.getInventory().addItem(block.getDrops().toArray(new ItemStack[0]));
+
+            if (!leftover.isEmpty()) {
+                Bukkit.getPlayer(miner.getOwner()).sendMessage("Chest full, miner off");
+                miner.stop();
+                return;
+            }
+
+        } else {
+            for (ItemStack item : block.getDrops()) {
+                dropLocation.getWorld().dropItemNaturally(dropLocation, item);
+            }
+        }
+        block.setType(Material.AIR);
+
+    }
+
+
     public void mineBlock(Block block){
         if (miner.getFueltank().takeFuel(5)){
 
             playEnergyBeam();
-            block.breakNaturally();
+            checkChest(block);
         }else{
             miner.stop();
             Bukkit.getPlayer(miner.getOwner()).sendMessage("No fuel, miner disabled");
@@ -109,5 +142,7 @@ public class MinerHead {
         }
     }
 
-
+    public Location getDropLocation() {
+        return dropLocation;
+    }
 }
